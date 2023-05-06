@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Sessions {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    discordId String
+    username  String
+}
+
+model Server {
+    // Guild ID
+    id     String  @id
+    // API Key
+    apiKey String?
+}
