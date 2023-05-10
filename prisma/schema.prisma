@@ -16,11 +16,13 @@ model Sessions {
     createdAt DateTime @default(now())
     discordId String
     username  String
+    status    String   @default("pending")
 }
 
 model Server {
     // Guild ID
-    id     String  @id
+    id         String  @id
     // API Key
-    apiKey String?
+    apiKey     String
+    linkedRole String?
 }
