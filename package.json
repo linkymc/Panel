@@ -18,6 +18,8 @@
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
     "axios": "^1.4.0",
+    "daisyui": "^2.51.6",
+    "framer-motion": "^10.12.10",
     "generate-api-key": "^1.0.2",
     "next": "13.3.4",
     "node-cache": "^5.1.2",
