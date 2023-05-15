@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Link from "next/link";
 
 const MinecraftCTA = () => {
   return (
@@ -19,7 +20,6 @@ const MinecraftCTA = () => {
       <div>
         <span className="text-gray-500">(( </span>
         <span className="cursor-pointer text-blue-300">
-          {" "}
           Not you? Click to block future requests.
         </span>
         <span className="text-gray-500"> ))</span>
@@ -38,9 +38,11 @@ const Home: NextPage = () => {
             <p className="select-none py-6">
               Bring Discord into the Minecraft world.
             </p>
-            <button className="btn-secondary btn normal-case text-slate-200 transition duration-300 ease-in">
-              Panel
-            </button>
+            <Link href={"/panel"} passHref>
+              <button className="btn-secondary btn normal-case text-slate-200 transition duration-300 ease-in">
+                Panel
+              </button>
+            </Link>
           </div>
           <MinecraftCTA />
         </div>
