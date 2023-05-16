@@ -41,6 +41,8 @@ function Linky({ Component, pageProps }: AppProps) {
   return (
     <>
       <ClerkProvider
+        // note to self, this is hardcoded since Docker likes to complain
+        publishableKey="pk_test_dGlnaHQtYmFzcy03LmNsZXJrLmFjY291bnRzLmRldiQ"
         {...pageProps}
         appearance={{
           baseTheme: dark,
