@@ -61,7 +61,7 @@ const updateSession = async (
 
     const { status } = req.body;
 
-    if (!status || (status !== "approved" && status !== "denied")) {
+    if (!status || !["approved", "denied"].includes(status)) {
       return res.status(400).json({
         success: false,
         error: "Invalid body.",
@@ -69,16 +69,12 @@ const updateSession = async (
     }
 
     if (serverData.linkedRole && status === "approved") {
-      await axios.put(
-        `https://discord.com/api/guilds/${serverData.id}/members/${session.discordId}/roles/${serverData.linkedRole}`,
-        null,
-        {
-          headers: {
-            "X-Audit-Log-Reason": `Verified their Minecraft account.`,
-            "Authorization": `Bot ${process.env.TOKEN}`
-          },
-        }
-      );
+      const addRole = `https://discord.com/api/guilds/${serverData.id}/members/${session.discordId}/roles/${serverData.linkedRole}`;
+      const headers = {
+        "X-Audit-Log-Reason": `Verified their Minecraft account.`,
+        Authorization: `Bot ${process.env.TOKEN}`,
+      };
+      await axios.put(addRole, null, { headers });
     }
 
     await prisma.sessions.update({
