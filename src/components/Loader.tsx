@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-export default function Loader() {
+export default function LoadingSpinner() {
   function generateNumbers(): number[] {
     const numbers = [];
     for (let i = 0; i <= 365; i += 25) {

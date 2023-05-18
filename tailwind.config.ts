@@ -10,7 +10,7 @@ export default {
     },
   },
   daisyui: {
-    themes: ["dracula"]
+    themes: ["dracula"],
   },
-  plugins: [require("daisyui")],
+  plugins: [require("@tailwindcss/typography"), require("daisyui")],
 } satisfies Config;

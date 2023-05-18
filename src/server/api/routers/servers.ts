@@ -1,11 +1,11 @@
 import { generateApiKey } from "generate-api-key";
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
-export const sessionRouter = createTRPCRouter({
-  create: publicProcedure
-    .input(z.object({ serverId: z.string() }))
+export const serverRouter = createTRPCRouter({
+  create: privateProcedure
+    .input(z.object({ serverId: z.string(), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const apiKey = generateApiKey({
         method: "string",
@@ -17,9 +17,20 @@ export const sessionRouter = createTRPCRouter({
         data: {
           apiKey,
           id: input.serverId,
+          name: input.name,
+          managers: JSON.stringify([ctx.userId]),
         },
       });
 
       return server;
     }),
+  fetch: privateProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.server.findMany({
+      where: {
+        managers: {
+          contains: ctx.userId,
+        },
+      },
+    });
+  }),
 });

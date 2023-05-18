@@ -24,5 +24,8 @@ model Server {
     id         String  @id
     // API Key
     apiKey     String
+    name       String
     linkedRole String?
+    // Managed users
+    managers   String
 }
