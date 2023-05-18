@@ -15,13 +15,26 @@
   justify-content: center;
 }
 
-.secondary-hero {
-  display: grid;
-  width: 100%;
-  place-items: center;
+.cl-internal-b3fm6y {
+  display: none;
 }
 
-.secondary-hero-content {
-  z-index: 0;
-  display: flex;
+.cl-userButtonPopoverFooter {
+  display: none;
+}
+
+.cl-navbar {
+  display: none;
+}
+
+.cl-profileSectionPrimaryButton {
+  color: #fff;
+}
+
+.cl-profileSectionPrimaryButton:hover {
+  background: #3d3d40;
+}
+
+.cl-badge {
+  backgroundcolor: "#fff";
 }
