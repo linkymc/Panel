@@ -4,6 +4,7 @@ import Navbar from "~/components/Navbar";
 import { api } from "~/utils/api";
 import LoadingSpinner from "~/components/Loader";
 import CreateServer from "~/components/CreateServer";
+import Link from "next/link";
 
 const Home: NextPage = () => {
   const {
@@ -21,7 +22,9 @@ const Home: NextPage = () => {
           <h2 className="card-title">{props.server.name}</h2>
           <p>a</p>
           <div className="card-actions mt-4 justify-end">
-            <button className={`btn-primary btn`}>Manage</button>
+            <Link href={`/panel/${props.server.id}`} passHref>
+              <button className={`btn-primary btn`}>Manage</button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { generateApiKey } from "generate-api-key";
 import { z } from "zod";
 
@@ -33,4 +34,25 @@ export const serverRouter = createTRPCRouter({
       },
     });
   }),
+  getSpecific: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const found = await ctx.prisma.server.findFirst({
+        where: {
+          managers: {
+            contains: ctx.userId,
+          },
+          id: input.id,
+        },
+      });
+
+      if (!found) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          cause: `Unable to access that server 😭`,
+        });
+      }
+
+      return found
+    }),
 });

@@ -9,13 +9,8 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { dark } from "@clerk/themes";
 import { useRouter } from "next/router";
+import { Toaster } from "react-hot-toast";
 
-//  List pages you want to be publicly accessible, or leave empty if
-//  every page requires authentication. Use this naming strategy:
-//   "/"              for pages/index.js
-//   "/foo"           for pages/foo/index.js
-//   "/foo/bar"       for pages/foo/bar.js
-//   "/foo/[...bar]"  for pages/foo/[...bar].js
 const publicPages: Array<string> = ["/", "/test"];
 
 function Linky({ Component, pageProps }: AppProps) {
@@ -48,6 +43,7 @@ function Linky({ Component, pageProps }: AppProps) {
           baseTheme: dark,
         }}
       >
+        <Toaster />
         {isPublicPage ? <Component {...pageProps} /> : <Authenticated />}
       </ClerkProvider>
     </>
