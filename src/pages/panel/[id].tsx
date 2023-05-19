@@ -4,8 +4,9 @@ import { generateSSGHelper } from "~/helpers/ssgHelper";
 import { api } from "~/utils/api";
 import { useEffect, useState, PropsWithChildren } from "react";
 import LoadingSpinner from "~/components/Loader";
-import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
+import constants from "~/constants";
 
 const Page = (props: PropsWithChildren) => {
   return (
@@ -54,16 +55,17 @@ const ServerPage: NextPage<{ id: string }> = ({ id }) => {
   }
 
   const APIKey = () => {
+    if (!data || !data.apiKey) return <></>;
     return (
-      <div className="flex w-fit flex-col items-center justify-center rounded-lg bg-base-200 p-4">
-        <label className="mb-2 text-sm text-gray-500">Your API Key:</label>
+      <div className="flex h-32 w-80 flex-col items-center justify-center rounded-lg bg-base-200  p-4">
+        <label className="0 mb-2">Your API Key:</label>
         <div className="w-80 text-center blur transition-all duration-300 hover:blur-none">
-          {data?.apiKey!!}
+          {data.apiKey}
         </div>
         <div
           className="mt-2"
           onClick={() => {
-            navigator.clipboard.writeText(data?.apiKey!!);
+            navigator.clipboard.writeText(data.apiKey);
             toast.success("Successfully copied!", {
               position: "bottom-center",
             });
@@ -88,6 +90,26 @@ const ServerPage: NextPage<{ id: string }> = ({ id }) => {
     );
   };
 
+  const InviteBot = () => {
+    if (!data || !data.id) return <></>;
+
+    if (data.inGuild) return <></>;
+
+    return (
+      <div className="flex h-32  w-80 flex-col items-center rounded-lg bg-base-200 p-4">
+        <article className="prose mb-2">
+          <p>Invite the bot</p>
+        </article>
+        <Link
+          href={`https://discord.com/oauth2/authorize?client_id=${constants.BOT_ID}&permissions=268435456&scope=bot&disable_guild_select=true&guild_id=${data.id}`}
+          passHref
+        >
+          <button className="btn-secondary btn capitalize">Invite</button>
+        </Link>
+      </div>
+    );
+  };
+
   return (
     <>
       <Navbar />
@@ -97,8 +119,9 @@ const ServerPage: NextPage<{ id: string }> = ({ id }) => {
             <article className="prose">
               <h1>{data?.name}</h1>
             </article>
-            <div className="mt-12 flex flex-row flex-wrap items-center justify-center">
+            <div className="mt-12 flex flex-row flex-wrap items-center justify-center gap-8">
               <APIKey />
+              <InviteBot />
             </div>
           </div>
         </div>

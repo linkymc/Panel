@@ -6,3 +6,7 @@ export default interface Guild {
   permissions: number;
   features: string[];
 }
+
+export interface AllGuildsResponse {
+  data: Guild[];
+}

@@ -4,11 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
 import { calculate } from "discord-permission";
-import Guild from "~/interfaces/Guild";
-
-interface AllGuildsResponse {
-  data: Guild[];
-}
+import Guild, { AllGuildsResponse } from "~/interfaces/Guild";
 
 interface AllRolesResponse {
   data: Guild[];
