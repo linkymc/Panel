@@ -1,8 +1,19 @@
 import { UserButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+
 const Navbar = () => {
   const { isLoaded, user } = useUser();
+
+  const { pathname } = useRouter();
+
+  const [url, setUrl] = useState("/");
+
+  useEffect(() => {
+    if (pathname === "/panel/[id]" && url !== "/panel") setUrl("/panel");
+  }, [pathname]);
 
   const UserDropdown = () => {
     return (
@@ -26,7 +37,7 @@ const Navbar = () => {
       <div className="navbar bg-base-100">
         <div className="md:ml-none ml-12 flex-1">
           <Image src="/link.png" width={64} height={64} alt="Link image" />
-          <Link href={"/"} passHref>
+          <Link href={url} passHref>
             <button className="btn-ghost btn text-xl normal-case">Linky</button>
           </Link>
         </div>
