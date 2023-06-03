@@ -20,6 +20,7 @@ const Navbar = () => {
       <>
         <div className="dropdown-end dropdown">
           <UserButton
+            afterSignOutUrl="/"
             appearance={{
               elements: {
                 userButtonBox: "scale-125",

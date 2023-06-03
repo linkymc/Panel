@@ -11,7 +11,9 @@ const Home: NextPage = () => {
     data: userServers,
     isLoading,
     isError,
-  } = api.servers.fetch.useQuery();
+  } = api.servers.fetch.useQuery(undefined, {
+    staleTime: 15 * 1000,
+  });
 
   const Server = (props: { server: Server }) => {
     return (
