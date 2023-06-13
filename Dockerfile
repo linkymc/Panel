@@ -23,11 +23,10 @@ RUN \
 
 FROM --platform=linux/amd64 node:16-alpine3.17 AS builder
 ARG DATABASE_URL
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY pk_test_bGl2aW5nLXN1bmZpc2gtNS5jbGVyay5hY2NvdW50cy5kZXYk
 
 # ENV NEXT_TELEMETRY_DISABLED 1
 
