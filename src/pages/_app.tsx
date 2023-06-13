@@ -10,7 +10,6 @@ import "~/styles/globals.css";
 import { dark } from "@clerk/themes";
 import { useRouter } from "next/router";
 import { Toaster, toast } from "react-hot-toast";
-import constants from "~/constants";
 import { useEffect } from "react";
 import Link from "next/link";
 

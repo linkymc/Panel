@@ -3,6 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { toast } from "react-hot-toast";
 
 interface IFormInputs {
   server: string;
@@ -21,6 +22,9 @@ const CreateServer = () => {
     onSuccess: () => {
       // wipe trpc cache to instantly update the servers
       void ctx.servers.fetch.invalidate();
+    },
+    onError: (d) => {
+      toast.error(d.message);
     },
   });
 

@@ -14,14 +14,28 @@ export const serverRouter = createTRPCRouter({
         pool: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_",
       }).toString();
 
-      const server = await ctx.prisma.server.create({
-        data: {
-          apiKey,
-          id: input.serverId,
-          name: input.name,
-          managers: JSON.stringify([ctx.userId]),
-        },
-      });
+      let server;
+
+      try {
+        server = await ctx.prisma.server.create({
+          data: {
+            apiKey,
+            id: input.serverId,
+            name: input.name,
+            managers: JSON.stringify([ctx.userId]),
+          },
+        });
+      } catch (err: any) {
+        const uniqueIdError = err
+          .toString()
+          .includes("Unique constraint failed on the fields: (`id`)");
+        if (uniqueIdError) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            cause: "A Linky instance already exists for that server.",
+          });
+        }
+      }
 
       return server;
     }),
@@ -53,6 +67,6 @@ export const serverRouter = createTRPCRouter({
         });
       }
 
-      return found
+      return found;
     }),
 });
