@@ -13,11 +13,9 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const auth = req.headers.authorization;
   const serverData: Server = authCache.get(auth);
 
-  let userSession;
-
   const searchField = id.includes("-") ? "uuid" : "discordId";
 
-  userSession = await prisma.sessions.findFirst({
+  const userSession = await prisma.sessions.findFirst({
     where: {
       [searchField]: id,
       status: {
@@ -51,6 +49,38 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
     success: true,
     isInGuild,
     ...userSession,
+  });
+};
+
+const unlinkUser = async (req: NextApiRequest, res: NextApiResponse) => {
+  const id = req.query.id as string;
+
+  const searchField = id.includes("-") ? "uuid" : "discordId";
+
+  const userSession = await prisma.sessions.findFirst({
+    where: {
+      [searchField]: id,
+      status: {
+        equals: "approved",
+      },
+    },
+  });
+
+  if (!userSession) {
+    return res.status(404).json({
+      success: false,
+      error: "User has not successfully linked.",
+    });
+  }
+
+  await prisma.sessions.delete({
+    where: {
+      id: userSession.id,
+    },
+  });
+
+  res.json({
+    success: true,
   });
 };
 
@@ -94,6 +124,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.method === "GET") {
     return getUser(req, res);
+  }
+
+  if (req.method === "DELETE") {
+    return unlinkUser(req, res);
   }
 
   return res.status(405).json({
