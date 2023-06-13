@@ -36,8 +36,21 @@ function Linky({ Component, pageProps }: AppProps) {
   };
 
   useEffect(() => {
+    const dismissed = window.localStorage.getItem("dismissedBeta");
+
+    if (dismissed) return;
+
     toast.custom(
       <div className="h-auto w-auto rounded-lg bg-white px-8 py-4 text-center text-gray-700 ">
+        <span
+          className="float-right cursor-pointer"
+          onClick={() => {
+            toast.dismiss("beta");
+            window.localStorage.setItem("dismissedBeta", "true");
+          }}
+        >
+          x
+        </span>
         <div>Welcome to the public beta!</div>
         <div>
           If you encounter any problems, open an{" "}
