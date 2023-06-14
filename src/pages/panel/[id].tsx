@@ -7,6 +7,7 @@ import LoadingSpinner from "~/components/Loader";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import constants from "~/constants";
+import Card from "~/components/Card";
 
 const Page = (props: PropsWithChildren) => {
   return (
@@ -27,6 +28,8 @@ const ServerPage: NextPage<{ id: string }> = ({ id }) => {
   });
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const ctx = api.useContext();
 
   useEffect(() => {
     if (isError) setErrorMsg(error.message);
@@ -55,38 +58,32 @@ const ServerPage: NextPage<{ id: string }> = ({ id }) => {
   }
 
   const APIKey = () => {
+    const { mutate } = api.servers.resetKey.useMutation({
+      onSuccess: () => {
+        void ctx.servers.getSpecific.invalidate();
+        toast.success("Successfully reset!");
+      },
+    });
+
     if (!data || !data.apiKey) return <></>;
     return (
-      <div className="flex h-32 w-80 flex-col items-center justify-center rounded-lg bg-base-200  p-4">
-        <label className="0 mb-2">Your API Key:</label>
-        <div className="w-80 text-center blur transition-all duration-300 hover:blur-none">
+      <Card title="API Key" size="w-fit">
+        <p className="blur transition-all duration-300 hover:blur-none">
           {data.apiKey}
-        </div>
-        <div
-          className="mt-2"
-          onClick={() => {
-            navigator.clipboard.writeText(data.apiKey);
-            toast.success("Successfully copied!", {
-              position: "bottom-center",
-            });
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 hover:cursor-pointer"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
+        </p>
+        <div className="mt-4">
+          <button
+            className="btn-error btn capitalize"
+            onClick={() => {
+              mutate({
+                id: data.id,
+              });
+            }}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-            />
-          </svg>
+            Reset
+          </button>
         </div>
-      </div>
+      </Card>
     );
   };
 
@@ -96,17 +93,16 @@ const ServerPage: NextPage<{ id: string }> = ({ id }) => {
     if (data.inGuild) return <></>;
 
     return (
-      <div className="flex h-32  w-80 flex-col items-center rounded-lg bg-base-200 p-4">
-        <article className="prose mb-2">
-          <p>Invite the bot</p>
-        </article>
-        <Link
-          href={`https://discord.com/oauth2/authorize?client_id=${constants.BOT_ID}&permissions=268435456&scope=bot&disable_guild_select=true&guild_id=${data.id}`}
-          passHref
-        >
-          <button className="btn-secondary btn capitalize">Invite</button>
-        </Link>
-      </div>
+      <Card title="Invite the bot" size="w-72">
+        <div className="mt-4">
+          <Link
+            href={`https://discord.com/oauth2/authorize?client_id=${constants.BOT_ID}&permissions=268435456&scope=bot&disable_guild_select=true&guild_id=${data.id}`}
+            passHref
+          >
+            <button className="btn-primary btn capitalize">Invite</button>
+          </Link>
+        </div>
+      </Card>
     );
   };
 

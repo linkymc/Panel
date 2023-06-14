@@ -1,18 +1,21 @@
 import { TRPCError } from "@trpc/server";
-import { generateApiKey } from "generate-api-key";
+import { generateApiKey as apiKeyGen } from "generate-api-key";
 import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
+
+const generateKey = () =>
+  apiKeyGen({
+    method: "string",
+    prefix: "linky",
+    pool: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_",
+  }).toString();
 
 export const serverRouter = createTRPCRouter({
   create: privateProcedure
     .input(z.object({ serverId: z.string(), name: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const apiKey = generateApiKey({
-        method: "string",
-        prefix: "linky",
-        pool: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_",
-      }).toString();
+      const apiKey = generateKey();
 
       let server;
 
@@ -68,5 +71,37 @@ export const serverRouter = createTRPCRouter({
       }
 
       return found;
+    }),
+  resetKey: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const found = await ctx.prisma.server.findFirst({
+        where: {
+          managers: {
+            contains: ctx.userId,
+          },
+          id: input.id,
+        },
+      });
+
+      if (!found) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          cause: `Unable to access that server 😭`,
+        });
+      }
+
+      await ctx.prisma.server.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          apiKey: generateKey(),
+        },
+      });
+
+      return {
+        success: true,
+      };
     }),
 });
