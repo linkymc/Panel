@@ -2,18 +2,66 @@
 
 The panel for Linky, a Discord x Minecraft linking [plugin](https://github.com/linkymc/Plugin).
 
-## Why?
+## API Documentation
 
-Typical Discord linking solutions require a good bit of work on the developers side. Like hosting their own bot within a plugin, for example. That takes up resources and isn't the easiest for newcomers to setup.
+Linky provides some APIs for implementing Linky into your own systems. Each API endpoint requires an `Authorization` header, with the instances API Key as the bearer token.
+The production API url is `https://linky.astrid.sh/api`
 
-Linky aims to improve upon this, by making the experience for both administrators AND users seemless.
+### User API
 
-## Setup
+### Fetch a user
 
-1. Head over to the [hosted version](https://linky.astrid.sh/) of the panel, and create an account.
-2. Create an instance for a particular Discord server, and invite the bot.
-3. Download and install the latest plugin release from [here](https://github.com/linkymc/Plugin)
-4. Input your API key from the panel into `config.yml`, and you're done :)
+```http
+GET /users/[discord id | minecraft uuid]
+```
+
+Example response
+
+```json
+{
+  "success": true,
+  "isInGuild": false,
+  "username": "UwUAroze",
+  "uuid": "901b391a-dadb-4702-8094-7f3a557014c9",
+  "discordId": "273524398483308549",
+  "id": "clivoum7n000008kv3ule2lyg"
+}
+```
+
+### Unlink User
+
+```http
+DELETE /users/[discord id | minecraft uuid]
+```
+
+Example response
+
+```json
+{
+  "success": true
+}
+```
+
+### Session API
+
+### Fetch a session
+
+```http
+GET /sessions/[session id]
+```
+
+Example response
+
+```json
+{
+  "username": "jadezinnia",
+  "discordId": "714383009310048267",
+  "uuid": "9179f482-4c78-4e5d-a17a-462186edcff0",
+  "id": "clivp0rxr000108kv1g61gljh",
+  "createdAt": "1686746047",
+  "status": "pending"
+}
+```
 
 ## Tech
 
