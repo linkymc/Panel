@@ -9,8 +9,9 @@ The production API url is `https://linky.astrid.sh/api`
 
 ### User API
 
-### Fetch a user
-
+<details>
+    <summary>Fetch a user</summary>
+<br/>
 ```http
 GET /users/[discord id | minecraft uuid]
 ```
@@ -28,7 +29,11 @@ Example response
 }
 ```
 
-### Unlink User
+</details>
+
+<details>
+    <summary>Unlink User</summary>
+<br/>
 
 ```http
 DELETE /users/[discord id | minecraft uuid]
@@ -42,9 +47,13 @@ Example response
 }
 ```
 
+</details>
+
 ### Session API
 
-### Fetch a session
+<details>
+    <summary>Fetch a session</summary>
+<br/>
 
 ```http
 GET /sessions/[session id]
@@ -62,6 +71,8 @@ Example response
   "status": "pending"
 }
 ```
+
+</details>
 
 ## Tech
 
